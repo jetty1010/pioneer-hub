@@ -3,251 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jake x Jetty — Weekly Lock In</title>
+<title>Artist Motion — Jake x Jetty</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-    background: #f5f4f0;
-    color: #1a1a1a;
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  .header {
-    background: #1a1a1a;
-    color: #fff;
-    padding: 24px 32px 20px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
+  .header { background: #1a1a1a; color: #fff; padding: 24px 32px 20px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
   .header .sub { font-size: 12px; color: #888; margin-top: 3px; letter-spacing: 0.5px; text-transform: uppercase; }
   .header-right { text-align: right; }
   .header-right .date { font-size: 14px; color: #ccc; font-weight: 500; }
   .header-right .meta { font-size: 12px; color: #666; margin-top: 3px; }
 
-  /* NAV */
-  .nav {
-    background: #fff;
-    border-bottom: 1px solid #e8e6e0;
-    padding: 0 32px;
-    display: flex;
-  }
-  .tab {
-    padding: 13px 18px 12px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #999;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.15s;
-    user-select: none;
-    white-space: nowrap;
-  }
+  .nav { background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 32px; display: flex; overflow-x: auto; }
+  .tab { padding: 13px 18px 12px; font-size: 13px; font-weight: 500; color: #999; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; user-select: none; white-space: nowrap; }
   .tab:hover { color: #444; }
   .tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
 
-  /* SECTIONS */
-  .main { padding: 24px 32px; }
+  .main { padding: 24px 32px 48px; }
   .section { display: none; }
   .section.active { display: block; }
+  .eyebrow { font-size: 11px; color: #aaa; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
 
-  /* ── ARTISTS ── */
-  .artist-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 14px;
-  }
-  .card {
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #e8e6e0;
-    overflow: hidden;
-  }
-  .card-head {
-    padding: 13px 16px 11px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #f0ede8;
-  }
-  .artist-label {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  .artist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #e8e6e0; overflow: hidden; }
+  .card-head { padding: 13px 16px 11px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f0ede8; }
+  .artist-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
   .dot { width: 7px; height: 7px; border-radius: 50%; }
-
-  .c-ar    { border-top: 3px solid #7c6fcd; }  .c-ar .artist-label { color: #7c6fcd; }  .c-ar .dot { background: #7c6fcd; }
-  .c-bk    { border-top: 3px solid #e07b54; }  .c-bk .artist-label { color: #e07b54; }  .c-bk .dot { background: #e07b54; }
-  .c-dm    { border-top: 3px solid #4a9b7f; }  .c-dm .artist-label { color: #4a9b7f; }  .c-dm .dot { background: #4a9b7f; }
-  .c-cs    { border-top: 3px solid #d4a843; }  .c-cs .artist-label { color: #d4a843; }  .c-cs .dot { background: #d4a843; }
-  .c-pr    { border-top: 3px solid #c45c8a; }  .c-pr .artist-label { color: #c45c8a; }  .c-pr .dot { background: #c45c8a; }
-  .c-br    { border-top: 3px solid #5b9bd5; }  .c-br .artist-label { color: #5b9bd5; }  .c-br .dot { background: #5b9bd5; }
-
+  .c-ar { border-top: 3px solid #7c6fcd; } .c-ar .artist-label { color: #7c6fcd; } .c-ar .dot { background: #7c6fcd; }
+  .c-bk { border-top: 3px solid #e07b54; } .c-bk .artist-label { color: #e07b54; } .c-bk .dot { background: #e07b54; }
+  .c-dm { border-top: 3px solid #4a9b7f; } .c-dm .artist-label { color: #4a9b7f; } .c-dm .dot { background: #4a9b7f; }
+  .c-cs { border-top: 3px solid #d4a843; } .c-cs .artist-label { color: #d4a843; } .c-cs .dot { background: #d4a843; }
+  .c-pr { border-top: 3px solid #c45c8a; } .c-pr .artist-label { color: #c45c8a; } .c-pr .dot { background: #c45c8a; }
+  .c-br { border-top: 3px solid #5b9bd5; } .c-br .artist-label { color: #5b9bd5; } .c-br .dot { background: #5b9bd5; }
   .card-body { padding: 14px 16px; }
-  .section-lbl {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: #555;
-    margin: 16px 0 8px;
-    padding-left: 8px;
-    border-left: 3px solid #ddd;
-    line-height: 1.2;
-  }
+  .section-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #bbb; margin: 14px 0 7px; }
   .section-lbl:first-child { margin-top: 0; }
-  .c-ar .section-lbl { border-left-color: #7c6fcd; color: #5a4fa8; }
-  .c-bk .section-lbl { border-left-color: #e07b54; color: #b85c33; }
-  .c-dm .section-lbl { border-left-color: #4a9b7f; color: #2d7a5f; }
-  .c-cs .section-lbl { border-left-color: #d4a843; color: #a07820; }
-  .c-pr .section-lbl { border-left-color: #c45c8a; color: #a03a6a; }
-  .c-br .section-lbl { border-left-color: #5b9bd5; color: #2d6fa8; }
   .items { list-style: none; }
-  .items li {
-    font-size: 13px;
-    line-height: 1.5;
-    color: #333;
-    padding: 4px 0 4px 13px;
-    position: relative;
-    border-bottom: 1px solid #f5f4f0;
-  }
+  .items li { font-size: 13px; line-height: 1.5; color: #333; padding: 4px 0 4px 13px; position: relative; border-bottom: 1px solid #f5f4f0; }
   .items li:last-child { border-bottom: none; }
-  .items li::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 11px;
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: #ddd;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 7px;
-    border-radius: 20px;
-    margin-left: 5px;
-    vertical-align: middle;
-  }
-  .b-red    { background: #fdecea; color: #c0392b; }
+  .items li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: #ddd; }
+  .items li b { font-weight: 650; color: #1a1a1a; }
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 20px; margin-left: 5px; vertical-align: middle; white-space: nowrap; }
+  .b-red { background: #fdecea; color: #c0392b; }
   .b-orange { background: #fef3e2; color: #d4851a; }
-  .b-green  { background: #e8f5ee; color: #27a65c; }
-  .b-gray   { background: #f0f0f0; color: #888; }
+  .b-green { background: #e8f5ee; color: #27a65c; }
+  .b-gray { background: #f0f0f0; color: #888; }
 
-  /* ── SCHEDULE ── */
-  .schedule-wrap {
-    overflow-x: auto;
-    padding-bottom: 8px;
-  }
-  .schedule {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(160px, 1fr));
-    gap: 10px;
-    min-width: 1120px;
-  }
-  .day {
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #e8e6e0;
-    overflow: hidden;
-  }
-  .day-hd {
-    padding: 10px 14px 9px;
-    background: #fafaf8;
-    border-bottom: 1px solid #eee;
-  }
+  .schedule-wrap { overflow-x: auto; padding-bottom: 8px; }
+  .schedule { display: grid; grid-template-columns: repeat(7, minmax(160px, 1fr)); gap: 10px; min-width: 1120px; }
+  .day { background: #fff; border-radius: 10px; border: 1px solid #e8e6e0; overflow: hidden; }
+  .day-hd { padding: 10px 14px 9px; background: #fafaf8; border-bottom: 1px solid #eee; }
   .day-name { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #aaa; }
   .day-num { font-size: 22px; font-weight: 700; color: #1a1a1a; line-height: 1.1; margin-top: 1px; }
-  .day-num.today {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px; border-radius: 8px;
-    background: #1a1a1a; color: #fff; font-size: 20px;
-  }
-  .day-body { padding: 10px 10px; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
-
-  .chip {
-    border-radius: 7px;
-    padding: 6px 9px;
-    font-size: 12px;
-    line-height: 1.35;
-  }
-  .chip-who {
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    opacity: 0.65;
-    display: block;
-    margin-bottom: 2px;
-  }
-  .chip-title { font-weight: 500; color: inherit; display: block; }
+  .day-num.today { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: #1a1a1a; color: #fff; font-size: 20px; }
+  .day-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
+  .chip { border-radius: 7px; padding: 6px 9px; font-size: 12px; line-height: 1.35; }
+  .chip-who { font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.65; display: block; margin-bottom: 2px; }
+  .chip-title { font-weight: 500; display: block; }
   .chip-time { font-size: 10px; opacity: 0.6; margin-top: 1px; display: block; }
+  .chip-note { font-size: 10px; font-style: italic; opacity: 0.7; margin-top: 1px; display: block; }
+  .chip.ar { background: #f0edfb; color: #5c50a8; }
+  .chip.bk { background: #fdf0eb; color: #b85c33; }
+  .chip.dm { background: #e8f4f0; color: #2d7a5f; }
+  .chip.cs { background: #fdf6e3; color: #a07820; }
+  .chip.pr { background: #fceef5; color: #a03a6a; }
+  .chip.br { background: #e8f2fb; color: #2d6fa8; }
+  .chip.due { background: #fdecea; color: #b03a2e; }
+  .sched-legend { margin-top: 12px; font-size: 11px; color: #aaa; }
 
-  .chip-note {
-    font-size: 10px;
-    font-style: italic;
-    opacity: 0.7;
-    margin-top: 1px;
-    display: block;
-  }
+  .risk-wrap { display: flex; flex-direction: column; gap: 10px; max-width: 940px; }
+  .risk-row { background: #fff; border-radius: 8px; border: 1px solid #e8e6e0; border-left: 3px solid #c0392b; padding: 13px 15px; }
+  .risk-title { font-size: 13px; font-weight: 650; }
+  .risk-why { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.45; }
+  .risk-move { font-size: 12px; color: #333; margin-top: 6px; line-height: 1.45; }
+  .risk-move b { color: #c0392b; font-weight: 700; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; }
 
-  /* artist chip colors */
-  .chip.ar      { background: #f0edfb; color: #5c50a8; }
-  .chip.bk      { background: #fdf0eb; color: #b85c33; }
-  .chip.dm      { background: #e8f4f0; color: #2d7a5f; }
-  .chip.cs      { background: #fdf6e3; color: #a07820; }
-  .chip.pr      { background: #fceef5; color: #a03a6a; }
-  .chip.br      { background: #e8f2fb; color: #2d6fa8; }
-  .chip.tracking { background: #f5f5f5; color: #999; border: 1px dashed #ddd; }
+  .dates { display: flex; flex-direction: column; gap: 8px; max-width: 940px; margin-bottom: 26px; }
+  .date-row { background: #fff; border-radius: 8px; border: 1px solid #e8e6e0; padding: 11px 14px; display: flex; gap: 14px; align-items: flex-start; }
+  .date-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #1a1a1a; background: #f0ede8; border-radius: 5px; padding: 4px 9px; white-space: nowrap; min-width: 86px; text-align: center; }
+  .date-body { font-size: 13px; color: #444; line-height: 1.55; }
 
-  /* ── EMAILS ── */
-  .emails { display: flex; flex-direction: column; gap: 10px; max-width: 820px; }
-  .e-group-lbl {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #bbb;
-    margin-top: 18px;
-    margin-bottom: 4px;
-  }
-  .e-group-lbl:first-child { margin-top: 0; }
-  .email-row {
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #e8e6e0;
-    padding: 13px 15px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .e-bar { width: 3px; border-radius: 2px; align-self: stretch; flex-shrink: 0; min-height: 40px; }
-  .e-content { flex: 1; }
-  .e-subject { font-size: 13px; font-weight: 600; }
-  .e-meta { font-size: 12px; color: #999; margin-top: 3px; }
-  .e-note { font-size: 12px; color: #555; margin-top: 5px; line-height: 1.45; }
-  .urgency {
-    font-size: 11px; font-weight: 600;
-    padding: 3px 9px; border-radius: 20px;
-    white-space: nowrap; flex-shrink: 0; margin-top: 1px;
-  }
-  .u-high   { background: #fdecea; color: #c0392b; }
-  .u-med    { background: #fef3e2; color: #d4851a; }
-  .u-low    { background: #f0f0f0; color: #999; }
+  .wait-table { width: 100%; max-width: 940px; background: #fff; border: 1px solid #e8e6e0; border-radius: 8px; border-collapse: collapse; overflow: hidden; }
+  .wait-table th { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #bbb; text-align: left; padding: 10px 14px; border-bottom: 1px solid #f0ede8; font-weight: 700; }
+  .wait-table td { font-size: 13px; color: #444; padding: 10px 14px; border-bottom: 1px solid #f5f4f0; }
+  .wait-table tr:last-child td { border-bottom: none; }
+  .stale { color: #c0392b; font-weight: 600; }
 
-  /* ── ADMIN ── */
-  .admin { display: flex; flex-direction: column; gap: 12px; max-width: 680px; }
+  .admin { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
   .admin-card { background: #fff; border-radius: 10px; border: 1px solid #e8e6e0; padding: 16px 18px; }
-  .admin-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+  .admin-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
   .admin-card p { font-size: 13px; color: #555; line-height: 1.5; }
-  .code { font-size: 12px; color: #888; font-family: monospace; background: #f5f4f0; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-top: 7px; }
+  .h2 { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #999; margin: 26px 0 12px; }
+  .h2:first-child { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -255,464 +104,423 @@
 <div class="header">
   <div>
     <h1>Jake × Jetty</h1>
-    <div class="sub">Weekly Lock In — Pioneer Artists</div>
+    <div class="sub">Artist Motion — Pioneer Artists</div>
   </div>
   <div class="header-right">
-    <div class="date">Monday, June 29, 2026</div>
-    <div class="meta">8:30 AM CST &nbsp;·&nbsp; Make Wake</div>
+    <div class="date">Week of August 10–16, 2026</div>
+    <div class="meta">Source: Artist Motion 8/10/2026 · BK timeline refreshed Fri 8/14</div>
   </div>
 </div>
 
 <div class="nav">
-  <div class="tab active" onclick="show('artists',this)">Artists</div>
+  <div class="tab active" onclick="show('artists',this)">Artist Briefing</div>
   <div class="tab" onclick="show('schedule',this)">Schedule</div>
+  <div class="tab" onclick="show('slips',this)">Nothing Slips</div>
   <div class="tab" onclick="show('admin',this)">Admin</div>
-  <div class="tab" onclick="show('tickets',this)">Tickets</div>
 </div>
 
 <div class="main">
 
-<!-- ══════════ ARTISTS ══════════ -->
-<div class="section active" id="tab-artists">
-<div class="artist-grid">
+  <div class="section active" id="tab-artists">
+    <div class="eyebrow">Artist Motion — 8/10/2026 · built from the Monday doc</div>
+    <div class="artist-grid">
 
-  <!-- BRILEY KING -->
-  <div class="card c-bk">
-    <div class="card-head"><span class="artist-label">Briley King</span><span class="dot"></span></div>
-    <div class="card-body">
-      <div class="section-lbl">Music — In Studio All Week</div>
-      <ul class="items">
-        <li>Tracking at RCA Studio A, 7/20–24. Jake's headed straight there after this meeting — feels good, nothing extra needed.</li>
-        <li><strong>Shooters in studio:</strong> Delaney on stills today, Jake Netter Wednesday, Meg Reynolds Monday + Tuesday for video.</li>
-        <li><strong>House manager needed</strong> — property's in rough shape, confirmed firsthand this weekend. Call Briley about house manager support.</li>
-      </ul>
-      <div class="section-lbl">So Anyway (Podcast)</div>
-      <ul class="items">
-        <li><strong>Marcus King is first guest</strong> — still contingent on the team feeling comfortable shooting on a quick timeline; also need to check his road schedule.</li>
-        <li>Guest booking/advance system comes together once next week's shoot is confirmed — this week-ish.</li>
-      </ul>
-      <div class="section-lbl">Admin</div>
-      <ul class="items">
-        <li><strong>LBT/A3 offboarding on track</strong> — handling the inventory move directly with Kennedy.</li>
-        <li><strong>PA search still open</strong> — same situation as house manager, leads mentioned last week.</li>
-      </ul>
+      <div class="card c-bk">
+        <div class="card-head"><span class="artist-label">Briley King</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Music Status</div>
+          <ul class="items">
+            <li><b>12 sides cut with Aaron Raitiere in Nashville</b> — Aaron and the mixer working steadily since.</li>
+            <li>First pass at ~3 mixes to listen to EOW / top of next week. The two singles get chosen off that batch. <span class="badge b-orange">Mixes in 8/17</span></li>
+            <li>Top 4 contenders: "Keepin Caroline," "Bad Guy," "Hussey &amp; a Housewife," "A Man That's Always Leaving."</li>
+            <li>Production is <b>way grittier than the demos</b> — Stapleton's players + Marcus, horns on every song.</li>
+            <li>Atlantic (Laurel, Lucy, Paige) have the demo link and want input once the two songs are locked.</li>
+          </ul>
+          <div class="section-lbl">Key Dates</div>
+          <ul class="items">
+            <li>Song selects due. <span class="badge b-red">Today 8/14</span></li>
+            <li>Mixes in. <span class="badge b-orange">8/17</span></li>
+            <li>BK content week / podcast filming hold. <span class="badge b-orange">8/24–8/28</span></li>
+            <li><b>Single artwork shoot, Nashville</b> — single artwork, press images + single visualizers. Lucy across set-up with Delaney. <span class="badge b-orange">8/24–8/25</span></li>
+            <li>Listening deadline. <span class="badge b-orange">8/25</span></li>
+            <li>Masters due. <span class="badge b-orange">8/25 10am</span></li>
+            <li>Podcast launch week hold. <span class="badge b-gray">Wk of 8/31</span></li>
+            <li>Single artwork deadline. <span class="badge b-orange">9/2</span></li>
+            <li>Podcast trailer hold. <span class="badge b-gray">9/7</span></li>
+            <li><b>2-Pack release — target, not locked.</b> Jake told Atlantic we'll move it if the set-up isn't right. <span class="badge b-orange">9/18</span></li>
+            <li>BK block — off day (LSU). <span class="badge b-gray">9/19</span></li>
+            <li><b>Do not release into 9/25</b> — Marcus's "I'm Blue" feat. Ernest drops, Briley &amp; Ella are on it. <span class="badge b-red">Blackout 9/25</span></li>
+            <li>Third single. <span class="badge b-gray">10/23</span></li>
+            <li>Album — early next year. <span class="badge b-gray">3/4</span></li>
+          </ul>
+          <div class="section-lbl">Creative Direction</div>
+          <ul class="items">
+            <li><b>Single artwork</b> — reference images done modern: Briley holding a glass of wine, an iron and a pigeon. Wearing the Retrofete Leslie knit top (metallic geranium) and Louboutin Juanita lace-ups.</li>
+            <li><b>Press images</b> — hot pants, blazers and tall boots as the uniform of the music era.</li>
+            <li><b>Deliverables list owed by Atlantic next week</b> — 8/24–25 shoot dates are the window to capture any video content, so the list has to land before then. <span class="badge b-red">Blocks the shoot</span></li>
+            <li>Possibly heading to Oxford around 9/18, same day as the 2-Pack drop — still just a possibility.</li>
+          </ul>
+          <div class="section-lbl">Set-Up &amp; Digital Roll-Out</div>
+          <ul class="items">
+            <li>Briley introduces the music <b>organically and self-shot</b>, same as all her content to date.</li>
+            <li>She wants music to open a new season / vertical — playing with comical ways to weave it into her current world.</li>
+            <li>She has a POV on timestamps, text on screen and how she introduces the music.</li>
+            <li><b>Asked Atlantic for a work-back schedule into 9/18</b> — posting cadence, timelines, sound usage. She works great with a plan.</li>
+            <li><b>Asked Atlantic for social goals / success metrics</b> — what's good vs. what's great.</li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Get cover art creation moving</b> — artwork deadline is 9/2, shoot is 8/24–25.</li>
+            <li><b>2-Pack + third single covers</b> — need to know if they waterfall into the eventual album cover.</li>
+            <li><b>Cover art / creative for the Marcus duet.</b></li>
+            <li><b>Delaney as creative director</b> — open question. Think she'd be great, she sources well. <span class="badge b-gray">MCK convo</span></li>
+            <li><b>2-Pack song selection</b> — picked off the first mix batch. Earlier lean was "Hussey" + "Caroline," dropping "Whippoorwill"; the email's four contenders are the live list. Not locked.</li>
+            <li><b>Delivery date for album.</b></li>
+            <li><b>Cover art for album.</b></li>
+            <li><b>Vinyl packaging.</b></li>
+          </ul>
+          <div class="section-lbl">Podcast</div>
+          <ul class="items">
+            <li>Marcus episode already shot, not released yet. Edits still needed.</li>
+            <li>Solo episode filmed 8/13; next solo film 8/19 11am.</li>
+            <li>3–4 solo episodes planned; shoot top of September — Tues / Wed / Thurs.</li>
+            <li>Podcast trailer needed. <span class="badge b-orange">Hold 9/7</span></li>
+            <li>Release timing still TBD.</li>
+          </ul>
+          <div class="section-lbl">Podcast Budget</div>
+          <ul class="items">
+            <li>Budget review needed.</li>
+            <li>Funds to start buying equipment / typical amenities for the outpost office studio space.</li>
+            <li>25% of budget set aside for misc. expenses. <span class="badge b-red">Needed ASAP</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card c-dm">
+        <div class="card-head"><span class="artist-label">Dylan Marlowe</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Single Rollout — self-titled album</div>
+          <ul class="items">
+            <li>"No Coincidence" — release. <span class="badge b-orange">8/21</span></li>
+            <li>"In This Boat" — release + ALBUM ANNOUNCE, pre-order/save, tracklist reveal, likely that Tuesday of the week. Still need to confirm the album-announce push is locked. <span class="badge b-orange">9/18</span></li>
+            <li>"Shotgun Seat" — needs treatment. <span class="badge b-gray">10/18</span></li>
+            <li>"Here Lately" — needs treatment. <span class="badge b-gray">10/31</span></li>
+            <li>Focus track "Rock the Jukebox." <span class="badge b-orange">11/6</span></li>
+          </ul>
+          <div class="section-lbl">Content Calendar</div>
+          <ul class="items">
+            <li>IG2. <span class="badge b-gray">9/17</span></li>
+            <li>IG3 / IG4 — Halloween tie-in? <span class="badge b-gray">10/18</span></li>
+            <li>Album release w/ focus track. <span class="badge b-orange">11/6</span></li>
+            <li>Follow-up push. <span class="badge b-gray">11/8</span></li>
+          </ul>
+          <div class="section-lbl">Creative</div>
+          <ul class="items">
+            <li>TBD, timed to the album-announce push — that's when full creative locks in on the profile.</li>
+            <li>Creative trailer needed.</li>
+            <li>IG2 tie-in: Berger (for "Rock the Jukebox"?).</li>
+            <li>IG3 tie-in: slow it down for "Here Lately."</li>
+            <li>Band content with live lip syncs.</li>
+            <li>Bill Murray-type content concept.</li>
+            <li><b>Make sure Ags is dialed in</b> and understands the short-form plan.</li>
+            <li>First shoot happened last Tuesday morning — check status on the visualizers.</li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Cover was due Tue 8/11</b> — delivered; Tracy flagged palette diversity. <span class="badge b-orange">Action it</span></li>
+            <li><b>Vinyl / cover package.</b> <span class="badge b-orange">8/11</span></li>
+            <li><b>Meet with radio team.</b></li>
+            <li><b>Get Kappy on a call with the Sony radio team</b> — what would it take to bring one of these songs to radio, and set up the edits that requires.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card c-pr">
+        <div class="card-head"><span class="artist-label">Penelope Road</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Album Rollout — "Maybe in Time"</div>
+          <ul class="items">
+            <li>"Smile Again" — already out. <span class="badge b-green">7/24</span></li>
+            <li>Announce album for International. <span class="badge b-orange">8/27</span></li>
+            <li>"New Money" — track releasing alongside the album announce. <span class="badge b-orange">8/28</span></li>
+            <li>"Come Down." <span class="badge b-gray">10/2</span></li>
+            <li>Album release — focus track still TBD. <span class="badge b-orange">10/23</span></li>
+          </ul>
+          <div class="section-lbl">Creative Deadlines</div>
+          <ul class="items">
+            <li>Album vinyl + cover deadline — don't think we hit this one. <span class="badge b-red">Missed 8/4</span></li>
+            <li>"New Money" shoot — already happened. <span class="badge b-green">8/6</span></li>
+            <li>Delivery of cutdowns for the "New Money" music video. <span class="badge b-orange">8/21</span></li>
+            <li>Focus track still to be chosen; creative needed once picked.</li>
+            <li><b>Develop creative for "Come Down" and get it going immediately</b> — talk to Dan.</li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Focus track choice</b> for the 10/23 album release.</li>
+            <li><b>Cover art for "New Money."</b></li>
+            <li><b>Single covers</b> — figure out if they all match up visually as we roll into the album.</li>
+            <li><b>Decide:</b> countdown page live w/ tracklist on the "New Money" release, or a different approach to the album announce.</li>
+            <li><b>Album assets</b> — confirm what all Neil is contracted to deliver.</li>
+            <li><b>Build treatment for "Come Down."</b></li>
+            <li><b>Concept + treatment for IG3.</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card c-cs">
+        <div class="card-head"><span class="artist-label">Conner Smith</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Possible Singles</div>
+          <ul class="items">
+            <li>"Pink Champagne."</li>
+            <li>"Fall Down" — feature?</li>
+            <li>"Hands Are Shakin'."</li>
+            <li>"Best Tears Ever Cried."</li>
+            <li>"Rock Bottom" — Jetty's home run if we plan this correctly. <span class="badge b-green">Home run</span></li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Lock down the actual release date for "Pink Champagne."</b></li>
+            <li><b>Jordan Younger on creative</b> — cover art graphic element.</li>
+            <li><b>Poster needed for Fox + Locke.</b></li>
+            <li><b>October release</b> — waterfall concept?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card c-ar">
+        <div class="card-head"><span class="artist-label">A.R. Simmons</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Where We Stand</div>
+          <ul class="items">
+            <li>7-cut version in play.</li>
+            <li>Have both the 7-song and 8-song budgets in from Scojo. <span class="badge b-green">Received</span></li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Need priority tracks.</b></li>
+            <li><b>Need timeline + Chip's OK.</b></li>
+            <li><b>Get with Khalid on creative.</b></li>
+            <li><b>Jake + Jetty to align on how to word the response</b> before replying to Scojo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card c-br">
+        <div class="card-head"><span class="artist-label">Bishop Reilly</span><span class="dot"></span></div>
+        <div class="card-body">
+          <div class="section-lbl">Where We Stand</div>
+          <ul class="items">
+            <li>Not in the 8/10 Artist Motion doc.</li>
+            <li>No activity since March 2026 — last touch was the Safelight Records deal discussion.</li>
+          </ul>
+          <div class="section-lbl">Needs</div>
+          <ul class="items">
+            <li><b>Five months quiet</b> — confirm whether that's intentional. <span class="badge b-orange">Flag</span></li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- DYLAN MARLOWE -->
-  <div class="card c-dm">
-    <div class="card-head"><span class="artist-label">Dylan Marlowe</span><span class="dot"></span></div>
-    <div class="card-body">
-      <div class="section-lbl">Headline for Jake</div>
-      <ul class="items">
-        <li>In-house meeting at Sony locked in for Wednesday afternoon (7/22) — Dylan playing the record for the label.</li>
-        <li>Jake feels good about the music itself but wants to prep more before Wednesday — not fully ready yet.</li>
-      </ul>
-      <div class="section-lbl">This Week</div>
-      <ul class="items">
-        <li>Sony in-house graphic design/packaging still unresolved — Jake chasing Tracy today, getting pushback.</li>
-        <li>Vinyl liners + credits due tomorrow (Tue 7/21). Album cover due Thursday 7/23 — will Spidey have everything delivered by then?</li>
-        <li>Road weekend went well, band having fun — want AGS to capture it tastefully given the lighter touring pace and alcohol on set.</li>
-      </ul>
-      <div class="section-lbl">2027 Touring</div>
-      <ul class="items">
-        <li>What does next year's touring look like, and how are we feeling about how CAA is attacking this?</li>
-        <li>Is Jake still feeling pressed by Dylan's band for dates through the end of this year?</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- PENELOPE ROAD -->
-  <div class="card c-pr">
-    <div class="card-head"><span class="artist-label">Penelope Road</span><span class="dot"></span></div>
-    <div class="card-body">
-      <div class="section-lbl">This Week</div>
-      <ul class="items">
-        <li>On the road opening for Marcus King — Salt Lake City 7/19, Denver 7/20–21, continuing through the week.</li>
-        <li>SLC content shoot happened last week — did the team feel like we grabbed a usable cover shot? Still unanswered.</li>
-        <li>Breakout call needed this week — confirmed, likely as early as tomorrow.</li>
-        <li>Band's in Nashville next week — Jake wants a full-roster group photo + press piece while everyone's in town.</li>
-        <li>Production pack: looping in Business Management to dig into what the band's "dream production pack" actually looks like, and have BM assess what's feasible vs. not.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- CONNER SMITH -->
-  <div class="card c-cs">
-    <div class="card-head"><span class="artist-label">Conner Smith</span><span class="dot"></span></div>
-    <div class="card-body">
-      <div class="section-lbl">Where We Stand</div>
-      <ul class="items">
-        <li>"Ballgame on the Radio" releases Friday 7/24 — same day as the Cardinals game.</li>
-        <li>Tuesday's content shoot is a 9v9 baseball game at a local field — connecting with Steph, who's confirmed to shoot.</li>
-        <li>"Hour with You" is actually at ~145K streams in 10 days (not 245K — that was a typo/glitch) — still has the most saves of Conner's past 3 releases.</li>
-      </ul>
-      <div class="section-lbl">Cardinals Game — Fri 7/24 ROS (from Katie)</div>
-      <ul class="items">
-        <li>3:30pm arrive Busch Stadium for BP · gates open 5:15 · KMOX + Cardinals TV pregame interviews in the 5:15–6:30 window · stadium emcee interview 6:30 · ceremony &amp; honorary pitch 6:40 · game 7:15.</li>
-        <li>17 confirmed attending right now — excited about this one, full run of show locked with Katie.</li>
-      </ul>
-      <div class="section-lbl">Needs to Happen</div>
-      <ul class="items">
-        <li>Fox &amp; Locke show confirmed — September 23. Still waiting on the other two residency dates — following up with Ashton.</li>
-        <li>Mercer University show confirmed — 8/20, 60-minute set. Contracting in progress (agency vs. direct).</li>
-        <li>Jake to build an offboarding plan for Ashton — Laken texted last week on the reporting plan, Jake working through it.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- A.R. SIMMONS -->
-  <div class="card c-ar">
-    <div class="card-head"><span class="artist-label">A.R. Simmons</span><span class="dot"></span></div>
-    <div class="card-body">
-      <div class="section-lbl">This Week</div>
-      <ul class="items">
-        <li>Writes every day this week except Thursday: Deric Ruttan/Jordan Walker (Mon), Odie Blackmon (Tue), Nick Pellegrino (Wed), Brennan Clements/Josh Kerr (Fri, Black River Entertainment).</li>
-        <li>Chip canceled A.R.'s mic test last week — discouraged him a bit.</li>
-        <li>Porchlight session went well — video slated to come out September 13. Jake doesn't think it'll move the needle much for A.R. specifically, but worth it for the free session.</li>
-      </ul>
-      <div class="section-lbl">Needs to Happen</div>
-      <ul class="items">
-        <li>A.R. passed on extra TikTok content on-site after Porchlight ("he'll be fine") — still lax on his own content push.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- BISHOP REILLY -->
-  <div class="card c-br">
-    <div class="card-head"><span class="artist-label">Bishop Reilly</span><span class="dot"></span></div>
-    <div class="card-body">
-      <ul class="items">
-        <li>Kid is workin.</li>
-        <li>Jake talked to Jody (Bishop's dad) directly — he's feeling good about things.</li>
-        <li>Josh Heffner decided on for Bishop's legal — Jake to hit Bishop about onboarding him.</li>
-        <li>Heffner's payment structure: commission-based, focused on the long game — 5%, based on deal terms, coming out of either the advance or the label.</li>
-      </ul>
-    </div>
-  </div>
-
-</div>
-</div>
-
-<!-- ══════════ SCHEDULE ══════════ -->
-<div class="section" id="tab-schedule">
-  <div style="font-size:11px;color:#aaa;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;">Week of June 29–July 5, 2026 — Live from artist calendars</div>
-  <div class="schedule-wrap">
-  <div class="schedule">
-
-    <!-- MON 6/29 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Monday</div>
-        <div class="day-num today">29</div>
-      </div>
-      <div class="day-body">
-        <div class="chip ar">
-          <span class="chip-who">A.R.</span>
-          <span class="chip-title">Write: Cole Taylor / Travis Denning</span>
-          <span class="chip-time">10am · 6326B Patton Ave</span>
-        </div>
-        <div class="chip ar">
-          <span class="chip-who">A.R.</span>
-          <span class="chip-title">Write: Ray Fulcher / Jesse Frasure</span>
-          <span class="chip-time">12:30pm</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 6/30 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Tuesday</div>
-        <div class="day-num">30</div>
-      </div>
-      <div class="day-body">
-        <div class="chip ar">
-          <span class="chip-who">A.R.</span>
-          <span class="chip-title">Write: Rhett Akins / Hunter Phelps</span>
-          <span class="chip-time">11am · Warner Chappell</span>
-        </div>
-        <div class="chip dm">
-          <span class="chip-who">Dylan</span>
-          <span class="chip-title">Travel Day</span>
-        </div>
-        <div class="chip cs">
-          <span class="chip-who">Conner</span>
-          <span class="chip-title">Bible Study</span>
-          <span class="chip-time">7am · (in Italy)</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED 7/1 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Wednesday</div>
-        <div class="day-num">1</div>
-      </div>
-      <div class="day-body">
-        <div class="chip bk">
-          <span class="chip-who">Briley</span>
-          <span class="chip-title">Team BK Sync</span>
-          <span class="chip-time">9am · Google Meet</span>
-          <span class="chip-note">Jake + Jetty on invite</span>
-        </div>
-        <div class="chip dm">
-          <span class="chip-who">Dylan</span>
-          <span class="chip-title">SHOW: The Boathouse, Myrtle Beach SC</span>
-          <span class="chip-note">Dylan HEADLINE · cap 1,250</span>
-        </div>
-        <div class="chip cs">
-          <span class="chip-who">Conner</span>
-          <span class="chip-title">GATOR + MARK @ K-LOVE Radio</span>
-          <span class="chip-time">10am · Franklin TN</span>
-          <span class="chip-note">Conner in Italy</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- THU 7/2 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Thursday</div>
-        <div class="day-num">2</div>
-      </div>
-      <div class="day-body">
-        <div class="chip ar">
-          <span class="chip-who">A.R.</span>
-          <span class="chip-title">Out of Town (through Mon 7/6)</span>
-        </div>
-        <div class="chip dm">
-          <span class="chip-who">Dylan</span>
-          <span class="chip-title">SHOW: The Windjammer, Isle of Palms SC</span>
-          <span class="chip-note">Dylan HEADLINE · cap 1,200</span>
-        </div>
-        <div class="chip pr">
-          <span class="chip-who">Penelope Road</span>
-          <span class="chip-title">James out of town</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- FRI 7/3 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Friday</div>
-        <div class="day-num">3</div>
-      </div>
-      <div class="day-body">
-        <div class="chip dm">
-          <span class="chip-who">Dylan</span>
-          <span class="chip-title">SHOW: Pinehurst, NC (Private)</span>
-          <span class="chip-note">Dylan HEADLINE · James Clark support</span>
-        </div>
-        <div class="chip br">
-          <span class="chip-who">Bishop</span>
-          <span class="chip-title">Record: Drinking Song for 4th of July post</span>
-        </div>
-        <div class="chip cs">
-          <span class="chip-who">Conner</span>
-          <span class="chip-title">Returns from Italy</span>
-          <span class="chip-time">Evening</span>
-        </div>
-        <div class="chip pr">
-          <span class="chip-who">Penelope Road</span>
-          <span class="chip-title">James returns</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SAT 7/4 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Saturday</div>
-        <div class="day-num">4</div>
-      </div>
-      <div class="day-body">
-        <div class="chip dm">
-          <span class="chip-who">Dylan</span>
-          <span class="chip-title">Travel Day (back)</span>
-        </div>
-        <div class="chip br">
-          <span class="chip-who">Bishop</span>
-          <span class="chip-title">Post: 4th of July Country Song</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUN 7/5 -->
-    <div class="day">
-      <div class="day-hd">
-        <div class="day-name">Sunday</div>
-        <div class="day-num">5</div>
-      </div>
-      <div class="day-body">
-      </div>
-    </div>
-
-  </div>
-  </div>
-  <div style="margin-top:12px;font-size:11px;color:#aaa;">
-    <span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f5f5f5;border:1px dashed #ddd;vertical-align:middle;margin-right:5px;"></span>
-    Gray dashed = Marcus King tour dates tracked on Briley's calendar. Briley is <em>not</em> performing these shows.
-  </div>
-</div>
-
-<!-- ══════════ ADMIN ══════════ -->
-<div class="section" id="tab-admin">
-<div class="admin">
-  <div class="admin-card">
-    <h3>Truist Park (Atlanta) Tickets</h3>
-    <p>Jake to reach out to Noah Kahan's team about getting tickets for the Atlanta Truist Park show.</p>
-  </div>
-</div>
-</div>
-
-</div><!-- /main -->
-
-<!-- ══════════ TICKETS ══════════ -->
-<div class="section" id="tab-tickets">
-  <div style="font-size:11px;color:#aaa;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">Dylan Marlowe — 2026 Ticket Counts · As of June 26</div>
-
-  <table style="width:100%;max-width:900px;border-collapse:collapse;font-size:13px;">
-    <thead>
-      <tr style="border-bottom:2px solid #e8e6e0;">
-        <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">Date</th>
-        <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">Venue</th>
-        <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">City</th>
-        <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">Cap</th>
-        <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">Sold</th>
-        <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;">Open</th>
-        <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;min-width:140px;">% Sold</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- 27-Jun -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fff;">
-        <td style="padding:11px 12px;font-weight:600;color:#888;">Jun 27</td>
-        <td style="padding:11px 12px;color:#aaa;">The Broadberry <span style="font-size:10px;font-style:italic;">(complete)</span></td>
-        <td style="padding:11px 12px;color:#bbb;">Richmond, VA</td>
-        <td style="padding:11px 12px;text-align:right;color:#bbb;">600</td>
-        <td style="padding:11px 12px;text-align:right;color:#888;font-weight:600;">242</td>
-        <td style="padding:11px 12px;text-align:right;color:#bbb;font-weight:700;">358</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#f0ede8;border-radius:4px;height:6px;"><div style="width:40%;background:#bbb;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#bbb;min-width:32px;">40%</span>
+  <div class="section" id="tab-schedule">
+    <div class="eyebrow">Week of August 10–16, 2026 — pulled from artist calendars</div>
+    <div class="schedule-wrap">
+      <div class="schedule">
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Mon</div><div class="day-num">10</div></div>
+          <div class="day-body">
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">NEEDTOBREATHE Vocals — Studio 3</span><span class="chip-time">12pm · East Iris Studios</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Grant / Tonya</span><span class="chip-time">2pm</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Baby appt</span><span class="chip-time">3:45pm</span></div>
+            <div class="chip br"><span class="chip-who">Bishop</span><span class="chip-title">Dan Fernandez</span><span class="chip-time">11am · Madison, TN</span></div>
+            <div class="chip br"><span class="chip-who">Bishop</span><span class="chip-title">Pay for Belmont</span><span class="chip-time">7pm</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 1-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fafaf8;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 1</td>
-        <td style="padding:11px 12px;color:#333;">The Boathouse</td>
-        <td style="padding:11px 12px;color:#888;">Myrtle Beach, SC</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">1,250</td>
-        <td style="padding:11px 12px;text-align:right;color:#333;font-weight:600;">351</td>
-        <td style="padding:11px 12px;text-align:right;color:#c0392b;font-weight:700;">899</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#f0ede8;border-radius:4px;height:6px;"><div style="width:28%;background:#c0392b;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#c0392b;min-width:32px;">28%</span>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Tue</div><div class="day-num">11</div></div>
+          <div class="day-body">
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Album cover delivered</span><span class="chip-note">Tracy flagged palette diversity</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Moving: Devin Dawson / Chandler Brown</span><span class="chip-time">11am</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Closed Course</span><span class="chip-time">3:30pm</span></div>
+            <div class="chip pr"><span class="chip-who">Penelope</span><span class="chip-title">2027 touring call w/ Caleb</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Bible Study</span><span class="chip-time">7am</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Walk</span><span class="chip-time">9am</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 2-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fff;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 2</td>
-        <td style="padding:11px 12px;color:#333;">The Windjammer</td>
-        <td style="padding:11px 12px;color:#888;">Isle of Palms, SC</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">1,200</td>
-        <td style="padding:11px 12px;text-align:right;color:#333;font-weight:600;">548</td>
-        <td style="padding:11px 12px;text-align:right;color:#c0392b;font-weight:700;">652</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#f0ede8;border-radius:4px;height:6px;"><div style="width:46%;background:#c0392b;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#c0392b;min-width:32px;">46%</span>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Wed</div><div class="day-num today">12</div></div>
+          <div class="day-body">
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">Team BK Sync</span><span class="chip-time">9am</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">Atlantic weekly call</span><span class="chip-time">3:30pm PT</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">GATOR + MARK</span><span class="chip-time">10am · KLOVE Radio</span></div>
+            <div class="chip br"><span class="chip-who">Bishop</span><span class="chip-title">Rachel Rivelle</span><span class="chip-time">8pm</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 8-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fafaf8;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 8</td>
-        <td style="padding:11px 12px;color:#333;">Jenks Club</td>
-        <td style="padding:11px 12px;color:#888;">Point Pleasant Beach, NJ</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">1,620</td>
-        <td style="padding:11px 12px;text-align:right;color:#333;font-weight:600;">411</td>
-        <td style="padding:11px 12px;text-align:right;color:#c0392b;font-weight:700;">1,209</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#f0ede8;border-radius:4px;height:6px;"><div style="width:25%;background:#c0392b;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#c0392b;min-width:32px;">25%</span>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Thu</div><div class="day-num">13</div></div>
+          <div class="day-body">
+            <div class="chip ar"><span class="chip-who">A.R.</span><span class="chip-title">Write: Brock Berryhill / Scooter Carusoe</span><span class="chip-time">11am · Warner Chappell</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">BK Solo Podcast</span><span class="chip-time">12pm</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Passport appointment</span><span class="chip-time">8am</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Travel day (fly)</span><span class="chip-time">BNA &gt; BUF</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Book meeting</span><span class="chip-time">5pm</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 10-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fff;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 10</td>
-        <td style="padding:11px 12px;color:#333;">Bottle &amp; Cork</td>
-        <td style="padding:11px 12px;color:#888;">Dewey Beach, DE</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">1,200</td>
-        <td style="padding:11px 12px;text-align:right;color:#333;font-weight:600;">310</td>
-        <td style="padding:11px 12px;text-align:right;color:#c0392b;font-weight:700;">890</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#f0ede8;border-radius:4px;height:6px;"><div style="width:26%;background:#c0392b;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#c0392b;min-width:32px;">26%</span>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Fri</div><div class="day-num">14</div></div>
+          <div class="day-body">
+            <div class="chip due"><span class="chip-who">Due</span><span class="chip-title">Conner — backend Spotify + Amazon pitches</span></div>
+            <div class="chip due"><span class="chip-who">Due</span><span class="chip-title">Dylan — teaser + trailer assets</span></div>
+            <div class="chip due"><span class="chip-who">Due</span><span class="chip-title">Dylan — "No Coincidence" quote to Rachel Hobbs</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">Studio Plush call w/ Haley</span><span class="chip-time">1pm CT</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">LBT x Opry Product Sync</span><span class="chip-time">2pm CT</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">MUSIC: Song selects due</span><span class="chip-note">Feeds the 2-Pack pick</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Show — Malone, NY</span><span class="chip-time">Franklin County Fairgrounds</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Waygo Retreat</span><span class="chip-time">6pm</span></div>
+            <div class="chip br"><span class="chip-who">Bishop</span><span class="chip-title">Moving In</span><span class="chip-time">3pm</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 16-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fafaf8;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 16</td>
-        <td style="padding:11px 12px;color:#333;">Kicker's Country Bar</td>
-        <td style="padding:11px 12px;color:#888;">Jacksonville Beach, FL</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">450</td>
-        <td style="padding:11px 12px;text-align:right;color:#27a65c;font-weight:700;">450</td>
-        <td style="padding:11px 12px;text-align:right;color:#27a65c;font-weight:700;">0</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#e8f5ee;border-radius:4px;height:6px;"><div style="width:100%;background:#27a65c;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:800;color:#27a65c;min-width:48px;">SOLD OUT</span>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Sat</div><div class="day-num">15</div></div>
+          <div class="day-body">
+            <div class="chip due"><span class="chip-who">Admin</span><span class="chip-title">TN sales tax filing</span><span class="chip-note">Confirm zero Aug pop-up sales</span></div>
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Show — Kegs Canal Side</span><span class="chip-time">Jordan, NY</span></div>
+            </div>
+        </div>
+        <div class="day">
+          <div class="day-hd"><div class="day-name">Sun</div><div class="day-num">16</div></div>
+          <div class="day-body">
+            <div class="chip dm"><span class="chip-who">Dylan</span><span class="chip-title">Travel day (bus)</span></div>
+            <div class="chip cs"><span class="chip-who">Conner</span><span class="chip-title">Draft day</span><span class="chip-time">9am</span></div>
+            <div class="chip bk"><span class="chip-who">Briley</span><span class="chip-title">Mixes in (Mon 8/17)</span><span class="chip-note">First pass at ~3 songs</span></div>
           </div>
-        </td>
-      </tr>
-      <!-- 17-Jul -->
-      <tr style="border-bottom:1px solid #f0ede8;background:#fff;">
-        <td style="padding:11px 12px;font-weight:600;color:#1a1a1a;">Jul 17</td>
-        <td style="padding:11px 12px;color:#333;">Tuffy's Music Box</td>
-        <td style="padding:11px 12px;color:#888;">Sanford, FL</td>
-        <td style="padding:11px 12px;text-align:right;color:#555;">490</td>
-        <td style="padding:11px 12px;text-align:right;color:#27a65c;font-weight:700;">490</td>
-        <td style="padding:11px 12px;text-align:right;color:#27a65c;font-weight:700;">0</td>
-        <td style="padding:11px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#e8f5ee;border-radius:4px;height:6px;"><div style="width:100%;background:#27a65c;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:800;color:#27a65c;min-width:48px;">SOLD OUT</span>
-          </div>
-        </td>
-      </tr>
-      <!-- TOTALS -->
-      <tr style="background:#f5f4f0;border-top:2px solid #e8e6e0;">
-        <td style="padding:12px 12px;font-weight:700;color:#1a1a1a;" colspan="3">7 Shows Total</td>
-        <td style="padding:12px 12px;text-align:right;font-weight:700;color:#1a1a1a;">6,810</td>
-        <td style="padding:12px 12px;text-align:right;font-weight:700;color:#1a1a1a;">2,802</td>
-        <td style="padding:12px 12px;text-align:right;font-weight:700;color:#c0392b;">4,008</td>
-        <td style="padding:12px 12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;background:#e8e6e0;border-radius:4px;height:6px;"><div style="width:39%;background:#d4851a;border-radius:4px;height:6px;"></div></div>
-            <span style="font-size:11px;font-weight:700;color:#d4851a;min-width:32px;">39%</span>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div style="margin-top:14px;font-size:11px;color:#aaa;">
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#27a65c;margin-right:5px;vertical-align:middle;"></span>70%+ sold &nbsp;&nbsp;
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d4851a;margin-right:5px;vertical-align:middle;"></span>40–69% &nbsp;&nbsp;
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c0392b;margin-right:5px;vertical-align:middle;"></span>Under 40% — needs attention
+        </div>
+      </div>
+    </div>
+    <div class="sched-legend">Red chips are deadlines, not calendar events. Penelope has no calendar entries after 8/11 this week.</div>
   </div>
+
+  <div class="section" id="tab-slips">
+    <div class="eyebrow">Nothing Slips — silent risk, hard dates, and the chase clock</div>
+
+    <div class="h2">Silent Risk — most likely to die quietly</div>
+    <div class="risk-wrap" style="margin-bottom:26px;">
+      <div class="risk-row">
+        <div class="risk-title">BK deliverables list from Atlantic</div>
+        <div class="risk-why">Jake asked for it "next week" in the 8/12 email. The 8/24–25 Nashville shoot is the only window to capture video content — if the list is late, the shoot happens blind.</div>
+        <div class="risk-move"><b>Move</b> — Chase Laurel/Lucy/Paige for the deliverables list by Wed 8/19.</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">BK work-back schedule into 9/18</div>
+        <div class="risk-why">Requested from Atlantic — posting cadence, timelines, sound usage, plus social success metrics. No owner or due date attached to the ask.</div>
+        <div class="risk-move"><b>Move</b> — Put a date on it at the next Team BK Sync (Wed 8/19, 9am).</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">Pink Champagne cover art</div>
+        <div class="risk-why">Owner is Ashton, who's offboarding. Release is 8/21. Told Alexa "finalizing today" on 8/11 — never confirmed.</div>
+        <div class="risk-move"><b>Move</b> — Get eyes on the actual file today. Don't accept "it's coming."</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">All four Ashton-owned Conner items</div>
+        <div class="risk-why">Ashton offboarding, Laken onboarding — no formal handoff logged.</div>
+        <div class="risk-move"><b>Move</b> — Reassign each one to Laken or Jetty in writing before 8/21.</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">LBT manufacturing call (Nashville Custom Hats)</div>
+        <div class="risk-why">Bumped 3x since 7/20, no owner will claim it.</div>
+        <div class="risk-move"><b>Move</b> — Jetty picks a time and sends it to MCK/Haley.</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">Certificate of Insurance — BK merch at 1823</div>
+        <div class="risk-why">Flagged urgent by Kennedy, zero replies in the thread.</div>
+        <div class="risk-move"><b>Move</b> — Find who actually handles BK merch storage and hand it to them.</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">Penelope Road — WMG billbacks</div>
+        <div class="risk-why">Both sides said they're not in touch with Warner finance. Nobody owns it.</div>
+        <div class="risk-move"><b>Move</b> — Escalate to Jake for an owner assignment.</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-title">Skojo studio budget (A.R.)</div>
+        <div class="risk-why">Two budgets sent, no decision made, no deadline forcing it.</div>
+        <div class="risk-move"><b>Move</b> — Put it in front of Jake as a 7 vs 8 song yes/no.</div>
+      </div>
+    </div>
+
+    <div class="h2">Hard Dates</div>
+    <div class="dates">
+      <div class="date-row"><div class="date-tag">Fri 8/14</div><div class="date-body">BK song selects DUE · Conner backend Spotify + Amazon pitches DUE · Dylan teaser/trailer assets DUE · Dylan "No Coincidence" quote DUE · LBT x Opry Product Sync 2pm CT · Studio Plush call 1pm CT</div></div>
+      <div class="date-row"><div class="date-tag">Sat 8/15</div><div class="date-body">TN sales tax filing — confirm zero August pop-up sales</div></div>
+      <div class="date-row"><div class="date-tag">Mon 8/17</div><div class="date-body">BK mixes in — first pass at ~3 songs · CMA Awards voting deadline (Jake personal) · Rock Nash rehearsals begin, thru 8/19 · Align PR Nashville trip window 8/17–19</div></div>
+      <div class="date-row"><div class="date-tag">Wed 8/19</div><div class="date-body">Team BK Sync 9am · BK solo podcast film 11am · Atlantic deliverables list owed this week</div></div>
+      <div class="date-row"><div class="date-tag">Fri 8/21</div><div class="date-body">Pink Champagne release (Conner) · "No Coincidence" release (Dylan) · A.R. Basement announce + on-sale</div></div>
+      <div class="date-row"><div class="date-tag">Sat 8/22</div><div class="date-body">Country Minute pop-up, Grand Rapids (Conner)</div></div>
+      <div class="date-row"><div class="date-tag">Wed 8/26</div><div class="date-body">Bristol Motor Speedway creator event (Dylan)</div></div>
+      <div class="date-row"><div class="date-tag">Sat 8/29</div><div class="date-body">Mercer Concert Series (Conner)</div></div>
+      <div class="date-row"><div class="date-tag">Mon 8/24 – Fri 8/28</div><div class="date-body">BK content week / podcast filming hold · <b>8/24–25 single artwork shoot, Nashville</b> — artwork, press images, single visualizers</div></div>
+      <div class="date-row"><div class="date-tag">Tue 8/25</div><div class="date-body">BK listening deadline · BK masters due 10am</div></div>
+      <div class="date-row"><div class="date-tag">Wed 9/2</div><div class="date-body">BK single artwork deadline</div></div>
+      <div class="date-row"><div class="date-tag">Mon 9/7</div><div class="date-body">BK podcast trailer hold</div></div>
+      <div class="date-row"><div class="date-tag">Fri 9/18</div><div class="date-body">BK 2-Pack release target (movable) · Dylan "In This Boat" + album announce</div></div>
+      <div class="date-row"><div class="date-tag">Fri 9/25</div><div class="date-body">BLACKOUT — Marcus King "I'm Blue" feat. Ernest (Briley &amp; Ella on it). Keep BK releases off this date.</div></div>
+    </div>
+
+    <div class="h2">Waiting On Them — chase clock</div>
+    <table class="wait-table">
+      <tr><th>Waiting on</th><th>For</th><th>Since</th></tr>
+      <tr><td>Atlantic (Laurel / Lucy / Paige)</td><td>BK deliverables list + work-back schedule into 9/18</td><td class="stale">Asked 8/12</td></tr>
+      <tr><td>Aaron Raitiere / mixer</td><td>First pass at ~3 BK mixes</td><td>Due 8/17</td></tr>
+      <tr><td>Kevin Eskowitz</td><td>ASCAP 2yr vs 4yr answer (Penelope Road)</td><td class="stale">8/6 — 6 days</td></tr>
+      <tr><td>Nashville Custom Hats / MCK / Haley</td><td>LBT manufacturing call</td><td class="stale">7/20 — 3+ weeks</td></tr>
+      <tr><td>Sony / Milom</td><td>80 Acres amendment</td><td>~8/10</td></tr>
+      <tr><td>Michael / Ags</td><td>Dylan teaser + trailer</td><td class="stale">Due 8/14</td></tr>
+      <tr><td>WME</td><td>NEEDTOBREATHE Q1 '27 dates</td><td>—</td></tr>
+      <tr><td>Warner finance</td><td>Penelope Road rebill + banking</td><td class="stale">Not initiated by anyone</td></tr>
+      <tr><td>Myles Shear</td><td>Golf Clothing appearance brief response</td><td class="stale">8/6</td></tr>
+      <tr><td>Armon Vakili</td><td>GTI Grows reschedule times</td><td>—</td></tr>
+    </table>
+  </div>
+
+  <div class="section" id="tab-admin">
+    <div class="eyebrow">Admin — internal, business, and Jake personal</div>
+    <div class="admin">
+      <div class="admin-card">
+        <h3>TN sales tax filing — 8/15</h3>
+        <p>Confirm zero August pop-up merch sales for Little Bird Trucking, then confirm to Neda.</p>
+      </div>
+      <div class="admin-card">
+        <h3>CMA Awards voting — 8/17</h3>
+        <p>Jake personally. Needs a reminder.</p>
+      </div>
+      <div class="admin-card">
+        <h3>Command Shift royalty splits</h3>
+        <p>Unclaimed splits are blocking Jake's payments. Needs a nudge.</p>
+      </div>
+      <div class="admin-card">
+        <h3>AKT statement</h3>
+        <p>Payment status unconfirmed — check with Kennedy/Eric.</p>
+      </div>
+      <div class="admin-card">
+        <h3>HEARD app feedback</h3>
+        <p>Kennedy compiling for Trevor. Send our notes this week.</p>
+      </div>
+      <div class="admin-card">
+        <h3>Golf Clothing appearance brief</h3>
+        <p>Myles Shear — roster interest and availability list owed. Unanswered since 8/6.</p>
+      </div>
+      <div class="admin-card">
+        <h3>GTI Grows reschedule</h3>
+        <p>Armon Vakili offered times; they were never sent back.</p>
+      </div>
+      <div class="admin-card">
+        <h3>Little Bird Trucking website rebrand</h3>
+        <p>Still needs to happen. A3 handoff done — Make Wake running it now.</p>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
